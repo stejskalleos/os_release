@@ -1,2 +1,2 @@
 # os_release
-/etc/os-release files
+`/etc/os-release` files from various operating systems
