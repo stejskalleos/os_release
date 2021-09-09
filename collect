@@ -1,0 +1,24 @@
+#!/bin/bash -e
+
+collect() {
+	podman run --rm -it --pull=always "$1" cat /etc/os-release
+}
+
+declare -A oses
+oses['alma_linux']='8.4'
+oses['centos']='7.9.2009 8.3.2011'
+oses['debian']='9 10 11'
+oses['fedora']='33 34'
+oses['oracle_linux']='8.4'
+oses['rhel']='' # No public containers
+oses['rockylinux/rocky_linux']='8.4'
+oses['ubuntu']='14.04 16.04 18.04 20.04'
+
+for os in "${!oses[@]}"; do
+	for release in ${oses[$os]} ; do
+		collect "${os/_/}:${release}" > "${os#*/}/${release}-container.sh"
+	done
+done
+
+# TODO: why is this needed?
+dos2unix */*-container.sh
